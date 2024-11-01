@@ -1,2 +1,11 @@
+from Mega import dados
+resultado = False
 
-szNome = input("Qual seu Nome: ")
+while not resultado:
+        resultado = dados.Apresentacao()
+        if resultado:
+            break
+    
+    
+
+
