@@ -26,7 +26,7 @@ def Mega_Sena(escolhido: Numeros_Escolhido):
                 print("Digite entre 1 e 60")
 
         except ValueError:
-            print(f'Digite digitou errado, digite entre (1, 60)')
+            print("Digite digitou errado, digite entre (1, 60)")
 
     print(f'Os numeros escolhidos foram {sorted(escolhido.numeros)}')
     Sorteio(escolhido)
@@ -58,8 +58,7 @@ def Sorteio(escolhido: Numeros_Escolhido):
 def Apresentacao():
     print("MEGA SENA")
     while True:
-        #Nome = str(input("Qual seu Nome: ")).lower().capitalize()
-        Nome = "Kaio"
+        Nome = str(input("Qual seu Nome: ")).lower().capitalize()
         escolhido.szNome = Nome
         if Nome.isalpha():
             print(f'Seja Bem Vindo {escolhido.szNome}')
