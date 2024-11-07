@@ -17,14 +17,16 @@ def Mega_Sena(escolhido: Numeros_Escolhido):
     Digitado = 0
     while resultado < 6:
         try:
-            Digitado = int(input(f'Digite o {resultado+1}º numero de 1 a 60: '))
-            if 0 < Digitado <= 60 and not NumerosIguais(escolhido, Digitado):
-                escolhido.numeros.append(Digitado)
-                resultado += 1
+            Digitado = int(input(f'Digite o {resultado+1}º numero de 1 a 60: ')) 
+            if 0 < Digitado <= 60:
+                if not NumerosIguais(escolhido, Digitado):
+                    escolhido.numeros.append(Digitado)
+                    resultado += 1                    
             else:
-                print("Voce digitou o mesmo numero duas vezes")
+                print("Digite entre 1 e 60")
+
         except ValueError:
-            print("Digite entre 1 e 60")
+            print(f'Digite digitou errado, digite entre (1, 60)')
 
     print(f'Os numeros escolhidos foram {sorted(escolhido.numeros)}')
     Sorteio(escolhido)
@@ -56,7 +58,8 @@ def Sorteio(escolhido: Numeros_Escolhido):
 def Apresentacao():
     print("MEGA SENA")
     while True:
-        Nome = str(input("Qual seu Nome: ")).lower().capitalize()
+        #Nome = str(input("Qual seu Nome: ")).lower().capitalize()
+        Nome = "Kaio"
         escolhido.szNome = Nome
         if Nome.isalpha():
             print(f'Seja Bem Vindo {escolhido.szNome}')
@@ -69,8 +72,10 @@ def Apresentacao():
 def NumerosIguais(escolhido: Numeros_Escolhido, iDigitado):
     for k in escolhido.numeros:
         if k == iDigitado:
+            print("Voce digitou o mesmo numero duas vezes")
             return True
         
+
 def Premio(escolhido: Numeros_Escolhido):
     if escolhido.listaSorteio == 4:
         print("Voce acertou a quadra")
