@@ -1,6 +1,8 @@
 from random import randint
 from dataclasses import dataclass, field
 from typing import List
+from prettytable import PrettyTable
+from time import sleep
 
 class Numeros_Escolhido:
     def __init__(self):
@@ -17,7 +19,7 @@ def Mega_Sena(escolhido: Numeros_Escolhido):
     resultado = 0
     Digitado = 0
     while resultado < len(escolhido.numeros):
-        print(f'Digite os 6 numeros do {resultado+1}º jogo')
+        iExibicao([f'{resultado+1}º JOGO'], [f'Digite os 6 numeros'])
         jogo = 0
         while jogo < 6:
             try:
@@ -35,30 +37,32 @@ def Mega_Sena(escolhido: Numeros_Escolhido):
         resultado += 1
         
     for contador in range(0 , len(escolhido.numeros)):
-        print(f'Os numeros do {contador+1}º jogo foram: {sorted(escolhido.numeros[contador])}')
+        iExibicao([f'Numeros do {contador+1}º jogo: '], [f'{sorted(escolhido.numeros[contador])}'])
 
 
 def Sorteio(escolhido: Numeros_Escolhido):
     resultado = 0
+    iExibicao(["MEGA SENA"], ["SORTEIO"])
     while resultado < 6:
         number = randint(1, 60)
         if number in escolhido.sorteio_number:
             continue
         escolhido.sorteio_number.append(number)
         print(f'{len(escolhido.sorteio_number)}º numero sorteado: {number}')
+        sleep(2)
         resultado += 1
     
-    print(f'Os numeros sorteados foram {sorted(escolhido.sorteio_number)}')
+    iExibicao(["Numeros Sorteados:"], [f'{sorted(escolhido.sorteio_number)}'])
     Acertou(escolhido)
 
 def Apresentacao():
     numero = 0
     resultado = False
-    print("MEGA SENA")
-    print("Digite seu Nome: (somente com caracteres)")
+    iExibicao(["MEGA SENA"], ["Digite seu Nome: (somente com caracteres)"])
     while True:
-        escolhido.szNome = str(input("Qual seu Nome: ")).lower().capitalize()
-        if escolhido.szNome.isalpha():
+        Nome = str(input("Qual seu Nome: ")).strip()
+        if all(parte.isalpha() for parte in Nome.split()):
+            escolhido.szNome = ' '.join(Nome.split()).title()
             print(f'Seja Bem Vindo {escolhido.szNome}')
             resultado = True
             if Escolha(numero) == 2:
@@ -80,13 +84,21 @@ def NumerosIguais(escolhido: Numeros_Escolhido, iDigitado, contador):
 
 
 def Premio(escolhido: Numeros_Escolhido):
-    for k in range(len(escolhido.sorteado)):
-        if len(escolhido.sorteado[k]) == 4:
-            print("Voce acertou a quadra")
-        elif len(escolhido.sorteado[k]) == 5:
-            print("Voce acertou a quina")
-        else:
-            print("Voce acertou tudo")
+    resultado = 0
+    iacerto = 0
+    for resultado in range(len(escolhido.sorteado)):
+        iacerto = len(escolhido.sorteado[resultado])
+        sleep(0.5)
+        if iacerto > 0:
+            iExibicao([f'{resultado+1}º JOGO'], [f' Acertos: {escolhido.sorteado[resultado]}'])
+            if iacerto == 4:
+                iExibicao([f'{resultado+1}º JOGO'], ["Voce acertou a quadra"])
+            elif iacerto == 5:
+                iExibicao([f'{resultado+1}º JOGO'], ["Voce acertou a quina"])
+            elif iacerto == 6:
+                iExibicao([f'{resultado+1}º JOGO'], ["Voce acertou tudo"])
+        elif iacerto == 0:
+            iExibicao([f'{resultado+1}º JOGO'], ["Voce nao acertou nenhum numero nesse jogo"])
 
 
 def Bolao():
@@ -102,18 +114,17 @@ def Bolao():
                 break
         resultado += 1
 
-    print("BOLAO")
+    iExibicao(["ESCOLHIDO"], ["BOLAO"])
     for k in range(0, len(escolhido.numeros)):
         print(f'{k+1}º: {escolhido.numeros[k]}')
+        sleep(1)
 
 
 
 def Escolha(numero):
     global quant_jogos
     resultado = 0
-    print("MENU")
-    print("1 - Fazer Jogo ")
-    print("2 - Bolao (20 Jogos)")
+    iExibicao(["MENU"], ["1 - Fazer Jogo "], ["2 - Bolao (20 Jogos)"])
     while not resultado:
         try:
             numero = int(input("Digite a opcao: "))
@@ -151,9 +162,16 @@ def Acertou(escolhido: Numeros_Escolhido):
         for k in range(0, 6):
             if escolhido.sorteio_number[k] in escolhido.numeros[resultado]:
                 escolhido.sorteado[resultado].append(escolhido.sorteio_number[k])
-
-        if len(escolhido.sorteado[resultado]) > 3:
-            Premio(escolhido.sorteado)
         resultado += 1
-        
-    
+
+    Premio(escolhido)
+
+
+def iExibicao(Apresentacao, text1, text2=None):
+    Mensagem = PrettyTable()
+    Mensagem.field_names = Apresentacao
+    Mensagem.add_row(text1)
+    if text2 is not None:
+        Mensagem.add_row(text2)
+    print(Mensagem)
+    Mensagem.clear()
